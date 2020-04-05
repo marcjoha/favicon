@@ -9,15 +9,23 @@ class Favicon {
     var result = await http.get(url);
     var document = parse(result.body);
 
-    // Look for icons in tags (add scheme if URL is relative)
+    // Look for icons in tags
     for (var rel in ['icon', 'shortcut icon']) {
       var iconTag = document.querySelector("link[rel='$rel']");
       var iconUrl = (iconTag != null && iconTag.attributes['href'] != null)
           ? iconTag.attributes['href']
           : null;
+
+      // Fix scheme relative URLs
       iconUrl = iconUrl != null && iconUrl.startsWith('//')
           ? uri.scheme + ':' + iconUrl
           : iconUrl;
+
+      // Fix relative URLs
+      iconUrl = iconUrl != null && iconUrl.startsWith('/')
+          ? uri.scheme + '://' + uri.host + iconUrl
+          : iconUrl;
+
       if (iconUrl != null) {
         favicons.add(iconUrl);
       }
