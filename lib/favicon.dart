@@ -6,8 +6,7 @@ class Favicon {
     var favicons = <String>[];
 
     var uri = Uri.parse(url);
-    var result = await http.get(url);
-    var document = parse(result.body);
+    var document = parse((await http.get(url)).body);
 
     // Look for icons in tags
     for (var rel in ['icon', 'shortcut icon']) {
@@ -33,7 +32,8 @@ class Favicon {
 
     // Look for icon by predefined URL
     var iconUrl = uri.scheme + '://' + uri.host + '/favicon.ico';
-    if ((await http.head(iconUrl)).statusCode == 200) {
+    var response = await http.get(iconUrl);
+    if (response.statusCode == 200 && response.contentLength > 0) {
       favicons.add(iconUrl);
     }
 

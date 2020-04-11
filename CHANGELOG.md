@@ -1,3 +1,7 @@
+# 1.0.3
+
+- Don't rely on HTTP 200 OK for predefined URLs, but check file size too
+
 # 1.0.2
 
 - Fix for relative URLs
