@@ -1,6 +1,6 @@
 import 'package:favicon/favicon.dart';
 
 main() async {
-  var favicons = await Favicon.getAll('https://thedividendstory.com/');
-  print(favicons);
+  var favicon = await Favicon.getBest('https://www.github.com');
+  print(favicon);
 }
