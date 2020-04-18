@@ -31,7 +31,7 @@ class Icon implements Comparable<Icon> {
 
   @override
   String toString() {
-    return 'Url: $url, width: $width, height: $height';
+    return '{Url: $url, width: $width, height: $height}';
   }
 }
 
@@ -45,30 +45,36 @@ class Favicon {
 
     // Look for icons in tags
     for (var rel in ['icon', 'shortcut icon']) {
-      var iconTag = document.querySelector("link[rel='$rel']");
-      var iconUrl = (iconTag != null && iconTag.attributes['href'] != null)
-          ? iconTag.attributes['href']
-          : null;
+      for (var iconTag in document.querySelectorAll("link[rel='$rel']")) {
+        if (iconTag != null && iconTag.attributes['href'] != null) {
+          var iconUrl = iconTag.attributes['href'];
 
-      // Fix scheme relative URLs
-      iconUrl = iconUrl != null && iconUrl.startsWith('//')
-          ? uri.scheme + ':' + iconUrl
-          : iconUrl;
+          // Fix scheme relative URLs
+          if (iconUrl.startsWith('//')) {
+            iconUrl = uri.scheme + ':' + iconUrl;
+          }
 
-      // Fix relative URLs
-      iconUrl = iconUrl != null && iconUrl.startsWith('/')
-          ? uri.scheme + '://' + uri.host + iconUrl
-          : iconUrl;
+          // Fix relative URLs
+          if (iconUrl.startsWith('/')) {
+            iconUrl = uri.scheme + '://' + uri.host + iconUrl;
+          }
 
-      if (iconUrl != null) {
-        iconUrls.add(iconUrl);
+          // Fix naked URLs
+          if (!iconUrl.startsWith('http')) {
+            iconUrl = uri.scheme + '://' + uri.host + '/' + iconUrl;
+          }
+
+          iconUrls.add(iconUrl);
+        }
       }
     }
 
     // Look for icon by predefined URL
     var iconUrl = uri.scheme + '://' + uri.host + '/favicon.ico';
     var response = await http.get(iconUrl);
-    if (response.statusCode == 200 && response.contentLength > 0) {
+    if (response.statusCode == 200 &&
+        response.contentLength > 0 &&
+        response.headers['content-type'].contains('image')) {
       iconUrls.add(iconUrl);
     }
 
@@ -91,7 +97,9 @@ class Favicon {
       }
 
       var image = decodeImage((await http.get(iconUrl)).bodyBytes);
-      favicons.add(Icon(iconUrl, width: image.width, height: image.height));
+      if (image != null) {
+        favicons.add(Icon(iconUrl, width: image.width, height: image.height));
+      }
     }
 
     return favicons..sort();

@@ -1,3 +1,16 @@
+# 1.0.7
+
+- Double-check content type for predefined URLs
+
+# 1.0.6
+
+- Fix for URLs with just path
+
+# 1.0.5
+
+- Fix for failure on multiple link tags
+- Fix for NPE
+
 # 1.0.4
 
 - Will sort output based on image dimensions
