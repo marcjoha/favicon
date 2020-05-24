@@ -111,9 +111,12 @@ class Favicon {
   }
 
   static Future<bool> _urlExists(String url) async {
+    print(url);
     var response = await http.get(url);
+    var contentType = response.headers['content-type'];
+    if (contentType == null) return false;
     return response.statusCode == 200 &&
         response.contentLength > 0 &&
-        response.headers['content-type'].contains('image');
+        contentType.contains('image');
   }
 }

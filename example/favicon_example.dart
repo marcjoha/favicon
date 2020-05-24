@@ -13,7 +13,8 @@ main() async {
     'http://dailybeast.com',
     'https://www.traveldailynews.com/',
     'https://www.tenable.com/blog-rss',
-    'http://blog.tenablesecurity.com/atom.xml' // Should fail and yield null
+    'http://blog.tenablesecurity.com/atom.xml', // Should fail and yield null
+    'https://hbr.org/'
   ];
 
   for (var url in urls) {
