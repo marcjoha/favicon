@@ -1,3 +1,7 @@
+# 1.0.10
+
+- Fix for NPE at content type check
+
 # 1.0.9
 
 - Always look for a valid HTTP status code, non-zero content and an image response header.

@@ -14,7 +14,7 @@ main() async {
     'https://www.traveldailynews.com/',
     'https://www.tenable.com/blog-rss',
     'http://blog.tenablesecurity.com/atom.xml', // Should fail and yield null
-    'https://hbr.org/'
+    'https://hbr.org/',
   ];
 
   for (var url in urls) {
