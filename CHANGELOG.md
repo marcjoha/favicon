@@ -1,3 +1,11 @@
+# 1.0.9
+
+- Always look for a valid HTTP status code, non-zero content and an image response header.
+
+# 1.0.8
+
+- Trims whitespace before and after URLs
+
 # 1.0.7
 
 - Double-check content type for predefined URLs

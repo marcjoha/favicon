@@ -47,7 +47,7 @@ class Favicon {
     for (var rel in ['icon', 'shortcut icon']) {
       for (var iconTag in document.querySelectorAll("link[rel='$rel']")) {
         if (iconTag != null && iconTag.attributes['href'] != null) {
-          var iconUrl = iconTag.attributes['href'];
+          var iconUrl = iconTag.attributes['href'].trim();
 
           // Fix scheme relative URLs
           if (iconUrl.startsWith('//')) {
@@ -64,17 +64,17 @@ class Favicon {
             iconUrl = uri.scheme + '://' + uri.host + '/' + iconUrl;
           }
 
-          iconUrls.add(iconUrl);
+          // Verify so the icon actually exists
+          if (await _urlExists(iconUrl)) {
+            iconUrls.add(iconUrl);
+          }
         }
       }
     }
 
     // Look for icon by predefined URL
     var iconUrl = uri.scheme + '://' + uri.host + '/favicon.ico';
-    var response = await http.get(iconUrl);
-    if (response.statusCode == 200 &&
-        response.contentLength > 0 &&
-        response.headers['content-type'].contains('image')) {
+    if (await _urlExists(iconUrl)) {
       iconUrls.add(iconUrl);
     }
 
@@ -108,5 +108,12 @@ class Favicon {
   static Future<Icon> getBest(String url) async {
     List<Icon> favicons = await getAll(url);
     return favicons.isNotEmpty ? favicons.first : null;
+  }
+
+  static Future<bool> _urlExists(String url) async {
+    var response = await http.get(url);
+    return response.statusCode == 200 &&
+        response.contentLength > 0 &&
+        response.headers['content-type'].contains('image');
   }
 }

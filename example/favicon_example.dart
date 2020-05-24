@@ -10,7 +10,10 @@ main() async {
     'https://www.businessinsider.com/',
     'https://www.mrmoneymustache.com/',
     'https://thedividendstory.com/',
-    'http://dailybeast.com'
+    'http://dailybeast.com',
+    'https://www.traveldailynews.com/',
+    'https://www.tenable.com/blog-rss',
+    'http://blog.tenablesecurity.com/atom.xml' // Should fail and yield null
   ];
 
   for (var url in urls) {
