@@ -36,7 +36,7 @@ class Icon implements Comparable<Icon> {
 }
 
 class Favicon {
-  static Future<List<Icon>> getAll(String url) async {
+  static Future<List<Icon>> getAll(String url, {List<String> suffixes}) async {
     var favicons = <Icon>[];
     var iconUrls = <String>[];
 
@@ -64,6 +64,9 @@ class Favicon {
             iconUrl = uri.scheme + '://' + uri.host + '/' + iconUrl;
           }
 
+          // Remove query strings
+          iconUrl = iconUrl.split('?').first;
+
           // Verify so the icon actually exists
           if (await _urlExists(iconUrl)) {
             iconUrls.add(iconUrl);
@@ -80,6 +83,11 @@ class Favicon {
 
     // Dedup
     iconUrls = iconUrls.toSet().toList();
+
+    // Filter on suffixes
+    if (suffixes != null) {
+      iconUrls.removeWhere((url) => !suffixes.contains(url.split('.').last));
+    }
 
     // Fetch dimensions
     for (var iconUrl in iconUrls) {
@@ -105,8 +113,8 @@ class Favicon {
     return favicons..sort();
   }
 
-  static Future<Icon> getBest(String url) async {
-    List<Icon> favicons = await getAll(url);
+  static Future<Icon> getBest(String url, {List<String> suffixes}) async {
+    List<Icon> favicons = await getAll(url, suffixes: suffixes);
     return favicons.isNotEmpty ? favicons.first : null;
   }
 
