@@ -1,3 +1,8 @@
+# 1.0.11
+
+- Support for filtering acceptable file extensions
+- Trims query string from URL
+
 # 1.0.10
 
 - Fix for NPE at content type check
