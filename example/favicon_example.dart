@@ -15,10 +15,12 @@ main() async {
     'https://www.tenable.com/blog-rss',
     'http://blog.tenablesecurity.com/atom.xml', // Should fail and yield null
     'https://hbr.org/',
-    'http://benfrain.com/'
+    'http://benfrain.com/',
+    'http://www.alistapart.com',
+    'https://fortune.com/'
   ];
 
   for (var url in urls) {
-    print(await Favicon.getBest(url, suffixes: ['png', 'gif', 'ico']));
+    print(await Favicon.getBest(url));
   }
 }
