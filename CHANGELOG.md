@@ -1,3 +1,7 @@
+# 1.0.12
+
+- Validation of ico file signaturee
+
 # 1.0.11
 
 - Support for filtering acceptable file extensions

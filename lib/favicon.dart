@@ -68,7 +68,7 @@ class Favicon {
           iconUrl = iconUrl.split('?').first;
 
           // Verify so the icon actually exists
-          if (await _urlExists(iconUrl)) {
+          if (await _verifyImage(iconUrl)) {
             iconUrls.add(iconUrl);
           }
         }
@@ -77,7 +77,7 @@ class Favicon {
 
     // Look for icon by predefined URL
     var iconUrl = uri.scheme + '://' + uri.host + '/favicon.ico';
-    if (await _urlExists(iconUrl)) {
+    if (await _verifyImage(iconUrl)) {
       iconUrls.add(iconUrl);
     }
 
@@ -118,10 +118,24 @@ class Favicon {
     return favicons.isNotEmpty ? favicons.first : null;
   }
 
-  static Future<bool> _urlExists(String url) async {
+  static Future<bool> _verifyImage(String url) async {
     var response = await http.get(url);
+
     var contentType = response.headers['content-type'];
-    if (contentType == null) return false;
+    if (contentType == null || !contentType.contains('image')) return false;
+
+    // Take extra care with ico's since they might be constructed manually
+    // Dignature from https://en.wikipedia.org/wiki/List_of_file_signatures
+    if (url.endsWith('.ico')) {
+      if (response.bodyBytes.length < 4) return false;
+      if (response.bodyBytes[0] != 0 &&
+          response.bodyBytes[1] != 0 &&
+          response.bodyBytes[2] != 1 &&
+          response.bodyBytes[3] != 0) {
+        return false;
+      }
+    }
+
     return response.statusCode == 200 &&
         response.contentLength > 0 &&
         contentType.contains('image');
