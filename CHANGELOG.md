@@ -1,6 +1,12 @@
+
+# 1.0.13
+
+- Better validation of ICO file signature, an ico can also contain a PNG.
+- Cleaned up code a bit.
+
 # 1.0.12
 
-- Validation of ico file signaturee
+- Validation of ICO file signaturee
 
 # 1.0.11
 
@@ -35,7 +41,7 @@
 # 1.0.4
 
 - Will sort output based on image dimensions
-- Added a getBest methods
+- Added a getBest method
 
 # 1.0.3
 

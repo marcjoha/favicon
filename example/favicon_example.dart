@@ -17,10 +17,13 @@ main() async {
     'https://hbr.org/',
     'http://benfrain.com/',
     'http://www.alistapart.com',
-    'https://fortune.com/'
+    'https://fortune.com/',
+    'https://tidochpengar.se/'
   ];
 
   for (var url in urls) {
+    print(url);
     print(await Favicon.getBest(url));
+    print('');
   }
 }

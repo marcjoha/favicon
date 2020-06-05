@@ -1,6 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
+
+// Signature from https://en.wikipedia.org/wiki/List_of_file_signatures
+const ICO_SIG = [0, 0, 1, 0];
+const PNG_SIG = [137, 80, 78, 71, 13, 10, 26, 10];
 
 class Icon implements Comparable<Icon> {
   String url;
@@ -125,13 +131,12 @@ class Favicon {
     if (contentType == null || !contentType.contains('image')) return false;
 
     // Take extra care with ico's since they might be constructed manually
-    // Dignature from https://en.wikipedia.org/wiki/List_of_file_signatures
     if (url.endsWith('.ico')) {
       if (response.bodyBytes.length < 4) return false;
-      if (response.bodyBytes[0] != 0 &&
-          response.bodyBytes[1] != 0 &&
-          response.bodyBytes[2] != 1 &&
-          response.bodyBytes[3] != 0) {
+
+      // Check if ico file contains a valid image signature
+      if (!_verifySignature(response.bodyBytes, ICO_SIG) &&
+          !_verifySignature(response.bodyBytes, PNG_SIG)) {
         return false;
       }
     }
@@ -139,5 +144,13 @@ class Favicon {
     return response.statusCode == 200 &&
         response.contentLength > 0 &&
         contentType.contains('image');
+  }
+
+  static bool _verifySignature(Uint8List bodyBytes, List<int> signature) {
+    var fileSignature = bodyBytes.sublist(0, signature.length);
+    for (var i = 0; i < fileSignature.length; i++) {
+      if (fileSignature[i] != signature[i]) return false;
+    }
+    return true;
   }
 }
