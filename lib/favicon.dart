@@ -47,7 +47,7 @@ class Favicon {
     var iconUrls = <String>[];
 
     var uri = Uri.parse(url);
-    var document = parse((await http.get(url)).body);
+    var document = parse((await http.get(uri)).body);
 
     // Look for icons in tags
     for (var rel in ['icon', 'shortcut icon']) {
@@ -110,7 +110,7 @@ class Favicon {
         continue;
       }
 
-      var image = decodeImage((await http.get(iconUrl)).bodyBytes);
+      var image = decodeImage((await http.get(Uri.parse(iconUrl))).bodyBytes);
       if (image != null) {
         favicons.add(Icon(iconUrl, width: image.width, height: image.height));
       }
@@ -125,7 +125,7 @@ class Favicon {
   }
 
   static Future<bool> _verifyImage(String url) async {
-    var response = await http.get(url);
+    var response = await http.get(Uri.parse(url));
 
     var contentType = response.headers['content-type'];
     if (contentType == null || !contentType.contains('image')) return false;

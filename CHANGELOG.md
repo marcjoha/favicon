@@ -1,4 +1,9 @@
 
+# 1.0.14
+
+- Updated dependencies
+- Added unit tests
+
 # 1.0.13
 
 - Better validation of ICO file signature, an ico can also contain a PNG.
