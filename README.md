@@ -3,7 +3,7 @@ Scrapes a website for favicons and orders them by image dimensions, or just retu
 ```dart
 import 'package:favicon/favicon.dart';
 var iconUrl = await Favicon.getBest('https://www.mashable.com');
-print iconUrl;
+print(iconUrl);
 ```
 
 Inspired by https://github.com/scottwernervt/favicon.
