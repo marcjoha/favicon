@@ -4,7 +4,7 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 
-// Signature from https://en.wikipedia.org/wiki/List_of_file_signatures
+// Signatures from https://en.wikipedia.org/wiki/List_of_file_signatures
 const ICO_SIG = [0, 0, 1, 0];
 const PNG_SIG = [137, 80, 78, 71, 13, 10, 26, 10];
 
@@ -87,7 +87,7 @@ class Favicon {
       iconUrls.add(iconUrl);
     }
 
-    // Dedup
+    // Deduplicate
     iconUrls = iconUrls.toSet().toList();
 
     // Filter on suffixes
