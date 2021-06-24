@@ -2,15 +2,16 @@ import 'package:favicon/favicon.dart';
 import 'package:test/test.dart';
 
 const FAVICONS = {
-  'https://www.aftonbladet.se': 'https://www.aftonbladet.se/favicon-32x32.png',
+  'https://www.aftonbladet.se':
+      'https://www.aftonbladet.se/cnp-assets/favicon/coast-228x228.png',
   'https://www.braziltravelblog.com':
-      'https://www.braziltravelblog.com/favicon.ico',
-  'https://www.mashable.com': 'https://mashable.com/android-chrome-192x192.png',
+      'https://www.braziltravelblog.com/wp-content/uploads/2021/04/cropped-brazil_small_flag-192x192.jpg',
+  'https://www.mashable.com': 'https://www.mashable.com/favicons/favicon.svg',
   'https://tradevenue.se/miljonarinnan30':
       'https://tradevenue.se/sites/all/themes/tradevenue_theme/image/tradevenue_icon.png',
   'https://github.com/': 'https://github.githubassets.com/favicons/favicon.svg',
   'https://www.businessinsider.com/':
-      'https://www.insider.com/public/assets/INSIDER/US/favicons/favicon-32x32.png',
+      'https://www.businessinsider.com/public/assets/BI/US/favicons/favicon-32x32.png',
   'https://www.mrmoneymustache.com/':
       'https://www.mrmoneymustache.com/favicon.ico',
   'https://thedividendstory.com/':
