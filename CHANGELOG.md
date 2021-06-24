@@ -1,4 +1,8 @@
 
+# 1.0.15
+
+- Null-safety
+
 # 1.0.14
 
 - Updated dependencies

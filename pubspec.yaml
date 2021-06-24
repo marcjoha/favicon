@@ -1,6 +1,6 @@
 name: favicon
 description: Library for finding favicons in a website, either in a <link> or by predefined URL.
-version: 1.0.14
+version: 1.0.15
 homepage: https://github.com/marcjoha/favicon
 
 environment:
