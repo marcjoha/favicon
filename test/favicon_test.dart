@@ -21,11 +21,11 @@ const FAVICONS = {
   'https://www.traveldailynews.com/':
       'https://www.traveldailynews.com/uploads/images/setting/favicon.ico',
   'https://www.tenable.com/blog-rss':
-      'https://www.tenable.com/sites/all/themes/tenablefourteen/img/favicons/favicon.svg',
+      'https://www.tenable.com/themes/custom/tenable/img/favicons/favicon.svg',
   'https://hbr.org/': 'https://hbr.org/favicon.ico',
   'http://benfrain.com/': 'http://benfrain.com/favicon2.svg',
   'http://www.alistapart.com':
-      'https://alistapart.com/wp-content/uploads/2019/03/cropped-icon_navigation-laurel-512.jpg',
+      'https://i0.wp.com/alistapart.com/wp-content/uploads/2019/03/cropped-icon_navigation-laurel-512.jpg',
   'https://fortune.com/':
       'https://content.fortune.com/wp-content/uploads/2020/02/favicon_144.ico',
   'https://tidochpengar.se/':
