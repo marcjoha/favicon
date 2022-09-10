@@ -1,3 +1,8 @@
+# 1.1
+
+- Breaking change: Renaming classes to avoid conflicts with common Flutter libs
+  - Favicon is now FaviconFinder
+  - Icon is now Favicon
 
 # 1.0.15
 

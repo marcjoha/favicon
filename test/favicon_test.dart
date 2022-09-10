@@ -36,7 +36,7 @@ const FAVICONS = {
 void main() {
   for (var url in FAVICONS.keys) {
     test('Testing URL [$url]', () async {
-      var icon = await Favicon.getBest(url);
+      var icon = await FaviconFinder.getBest(url);
       expect(icon?.url, equals(FAVICONS[url]));
     });
   }

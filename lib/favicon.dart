@@ -8,15 +8,15 @@ import 'package:image/image.dart';
 const ICO_SIG = [0, 0, 1, 0];
 const PNG_SIG = [137, 80, 78, 71, 13, 10, 26, 10];
 
-class Icon implements Comparable<Icon> {
+class Favicon implements Comparable<Favicon> {
   String url;
   int width;
   int height;
 
-  Icon(this.url, {this.width = 0, this.height = 0});
+  Favicon(this.url, {this.width = 0, this.height = 0});
 
   @override
-  int compareTo(Icon other) {
+  int compareTo(Favicon other) {
     // If both are vector graphics, use URL length as tie-breaker
     if (url.endsWith('.svg') && other.url.endsWith('.svg')) {
       return url.length < other.url.length ? -1 : 1;
@@ -41,9 +41,12 @@ class Icon implements Comparable<Icon> {
   }
 }
 
-class Favicon {
-  static Future<List<Icon>> getAll(String url, {List<String>? suffixes}) async {
-    var favicons = <Icon>[];
+class FaviconFinder {
+  static Future<List<Favicon>> getAll(
+    String url, {
+    List<String>? suffixes,
+  }) async {
+    var favicons = <Favicon>[];
     var iconUrls = <String>[];
 
     var uri = Uri.parse(url);
@@ -99,28 +102,29 @@ class Favicon {
     for (var iconUrl in iconUrls) {
       // No need for size calculation on vector images
       if (iconUrl.endsWith('.svg')) {
-        favicons.add(Icon(iconUrl));
+        favicons.add(Favicon(iconUrl));
         continue;
       }
 
       // Image library lacks read support for Ico, assume standard size
       // https://github.com/brendan-duncan/image/issues/212
       if (iconUrl.endsWith('.ico')) {
-        favicons.add(Icon(iconUrl, width: 16, height: 16));
+        favicons.add(Favicon(iconUrl, width: 16, height: 16));
         continue;
       }
 
       var image = decodeImage((await http.get(Uri.parse(iconUrl))).bodyBytes);
       if (image != null) {
-        favicons.add(Icon(iconUrl, width: image.width, height: image.height));
+        favicons
+            .add(Favicon(iconUrl, width: image.width, height: image.height));
       }
     }
 
     return favicons..sort();
   }
 
-  static Future<Icon?> getBest(String url, {List<String>? suffixes}) async {
-    List<Icon> favicons = await getAll(url, suffixes: suffixes);
+  static Future<Favicon?> getBest(String url, {List<String>? suffixes}) async {
+    List<Favicon> favicons = await getAll(url, suffixes: suffixes);
     return favicons.isNotEmpty ? favicons.first : null;
   }
 
