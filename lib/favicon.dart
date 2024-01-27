@@ -46,6 +46,10 @@ class FaviconFinder {
     String url, {
     List<String>? suffixes,
   }) async {
+    if (!verifyDomain(url)) {
+      throw ArgumentError('Invalid URL');
+    }
+
     var favicons = <Favicon>[];
     var iconUrls = <String>[];
 
@@ -115,8 +119,7 @@ class FaviconFinder {
 
       var image = decodeImage((await http.get(Uri.parse(iconUrl))).bodyBytes);
       if (image != null) {
-        favicons
-            .add(Favicon(iconUrl, width: image.width, height: image.height));
+        favicons.add(Favicon(iconUrl, width: image.width, height: image.height));
       }
     }
 
@@ -126,6 +129,35 @@ class FaviconFinder {
   static Future<Favicon?> getBest(String url, {List<String>? suffixes}) async {
     List<Favicon> favicons = await getAll(url, suffixes: suffixes);
     return favicons.isNotEmpty ? favicons.first : null;
+  }
+
+  /// Verifies if the given URL has a valid domain.
+  ///
+  /// This method checks if the URL has a valid scheme (either 'http' or 'https')
+  /// and if the domain follows a specific pattern. The domain pattern is checked
+  /// using a regular expression.
+  ///
+  /// If the URL parsing or domain pattern matching throws an exception, this
+  /// method will return [false].
+  ///
+  /// Returns [true] if the URL has a valid domain, otherwise returns [false].
+  static bool verifyDomain(String url) {
+    try {
+      var uri = Uri.parse(url);
+
+      // Verify the scheme (must be either 'http' or 'https')
+      if (uri.scheme != 'http' && uri.scheme != 'https') {
+        return false;
+      }
+
+      // Check the domain pattern using a regular expression
+      var domainPattern = RegExp(
+          r'^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9]+[a-zA-Z0-9-]+[a-zA-Z0-9]))(\.([a-zA-Z]{2,})+)+$');
+      return domainPattern.hasMatch(uri.host);
+    } catch (e) {
+      // Return false if an exception occurs during URL parsing or domain pattern matching
+      return false;
+    }
   }
 
   static Future<bool> _verifyImage(String url) async {
