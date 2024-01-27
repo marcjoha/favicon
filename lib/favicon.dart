@@ -46,7 +46,7 @@ class FaviconFinder {
     String url, {
     List<String>? suffixes,
   }) async {
-    if (!_verifyDomain(url)) {
+    if (!verifyDomain(url)) {
       throw ArgumentError('Invalid URL');
     }
 
@@ -141,7 +141,7 @@ class FaviconFinder {
   /// method will return [false].
   ///
   /// Returns [true] if the URL has a valid domain, otherwise returns [false].
-  static bool _verifyDomain(String url) {
+  static bool verifyDomain(String url) {
     try {
       var uri = Uri.parse(url);
 
