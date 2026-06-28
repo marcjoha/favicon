@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:html/parser.dart';
@@ -50,7 +51,7 @@ class FaviconFinder {
     var iconUrls = <String>[];
 
     var uri = Uri.parse(url);
-    var document = parse((await http.get(uri)).body);
+    var document = parse((await _safeGet(uri)).body);
 
     // Look for icons in tags
     for (var rel in ['icon', 'shortcut icon']) {
@@ -113,10 +114,9 @@ class FaviconFinder {
         continue;
       }
 
-      var image = decodeImage((await http.get(Uri.parse(iconUrl))).bodyBytes);
+      var image = decodeImage((await _safeGet(Uri.parse(iconUrl))).bodyBytes);
       if (image != null) {
-        favicons
-            .add(Favicon(iconUrl, width: image.width, height: image.height));
+        favicons.add(Favicon(iconUrl, width: image.width, height: image.height));
       }
     }
 
@@ -129,7 +129,7 @@ class FaviconFinder {
   }
 
   static Future<bool> _verifyImage(String url) async {
-    var response = await http.get(Uri.parse(url));
+    var response = await _safeGet(Uri.parse(url));
 
     var contentType = response.headers['content-type'];
     if (contentType == null || !contentType.contains('image')) return false;
@@ -139,15 +139,31 @@ class FaviconFinder {
       if (response.bodyBytes.length < 4) return false;
 
       // Check if ico file contains a valid image signature
-      if (!_verifySignature(response.bodyBytes, ICO_SIG) &&
-          !_verifySignature(response.bodyBytes, PNG_SIG)) {
+      if (!_verifySignature(response.bodyBytes, ICO_SIG) && !_verifySignature(response.bodyBytes, PNG_SIG)) {
         return false;
       }
     }
 
-    return response.statusCode == 200 &&
-        (response.contentLength ?? 0) > 0 &&
-        contentType.contains('image');
+    return response.statusCode == 200 && (response.contentLength ?? 0) > 0 && contentType.contains('image');
+  }
+
+  /// Performs a GET request, catching FormatException caused by malformed
+  /// Set-Cookie headers in dart:io via runZonedGuarded.
+  static Future<http.Response> _safeGet(Uri uri) async {
+    final completer = Completer<http.Response>();
+    runZonedGuarded(
+      () async {
+        try {
+          completer.complete(await http.get(uri));
+        } catch (e) {
+          if (!completer.isCompleted) completer.complete(http.Response('', 400));
+        }
+      },
+      (e, _) {
+        if (!completer.isCompleted) completer.complete(http.Response('', 400));
+      },
+    );
+    return completer.future;
   }
 
   static bool _verifySignature(Uint8List bodyBytes, List<int> signature) {
